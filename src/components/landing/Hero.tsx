@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Smartphone, Monitor, ArrowRight, Sparkles } from "lucide-react";
+import { Briefcase, User, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import NutriLogo from "@/components/icons/NutriLogo";
 
@@ -41,17 +41,17 @@ const Hero: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-16 animate-slide-up" style={{ animationDelay: "0.3s" }}>
-            <Link to="/portal">
+            <Link to="/login/profissional">
               <Button variant="hero" size="xl" className="group">
-                <Monitor className="w-5 h-5" />
-                Portal do Nutricionista
+                <Briefcase className="w-5 h-5" />
+                Sou Profissional
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link to="/app">
+            <Link to="/login/cliente">
               <Button variant="outline" size="xl" className="group">
-                <Smartphone className="w-5 h-5" />
-                App do Cliente
+                <User className="w-5 h-5" />
+                Sou Cliente
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
@@ -59,18 +59,18 @@ const Hero: React.FC = () => {
 
           {/* Device Preview Cards */}
           <div className="grid md:grid-cols-2 gap-6 w-full max-w-3xl animate-slide-up" style={{ animationDelay: "0.4s" }}>
-            <Link to="/portal" className="group">
+            <Link to="/login/profissional" className="group">
               <div className="relative p-6 rounded-2xl bg-card shadow-soft border border-border/50 hover:shadow-medium transition-all hover:scale-[1.02] cursor-pointer">
                 <div className="absolute top-4 right-4 w-10 h-10 rounded-full gradient-primary flex items-center justify-center">
-                  <Monitor className="w-5 h-5 text-primary-foreground" />
+                  <Briefcase className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Portal Web</h3>
+                <h3 className="text-xl font-bold mb-2">Área do Profissional</h3>
                 <p className="text-muted-foreground text-sm mb-4">
-                  Interface robusta para nutricionistas gerenciarem pacientes, 
-                  planos alimentares e acompanhamento.
+                  Interface completa para nutricionistas gerenciarem pacientes, 
+                  criarem planos alimentares e acompanharem resultados.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {["Dashboard", "Planos", "Chat", "Relatórios"].map((tag) => (
+                  {["Dashboard", "Criar Clientes", "Planos", "Relatórios"].map((tag) => (
                     <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
                       {tag}
                     </span>
@@ -79,15 +79,15 @@ const Hero: React.FC = () => {
               </div>
             </Link>
 
-            <Link to="/app" className="group">
+            <Link to="/login/cliente" className="group">
               <div className="relative p-6 rounded-2xl bg-card shadow-soft border border-border/50 hover:shadow-medium transition-all hover:scale-[1.02] cursor-pointer">
                 <div className="absolute top-4 right-4 w-10 h-10 rounded-full gradient-secondary flex items-center justify-center">
-                  <Smartphone className="w-5 h-5 text-secondary-foreground" />
+                  <User className="w-5 h-5 text-secondary-foreground" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">App Mobile</h3>
+                <h3 className="text-xl font-bold mb-2">Área do Cliente</h3>
                 <p className="text-muted-foreground text-sm mb-4">
-                  Interface intuitiva para pacientes acompanharem seu plano, 
-                  registrarem refeições e evoluírem.
+                  Acesse seu plano alimentar, registre refeições, 
+                  acompanhe sua evolução e converse com seu nutricionista.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Diário", "Plano", "Receitas", "Evolução"].map((tag) => (
