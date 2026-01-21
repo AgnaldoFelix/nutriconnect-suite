@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import NutriLogo from "@/components/icons/NutriLogo";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Home,
   UtensilsCrossed,
@@ -15,12 +17,13 @@ import {
   ChevronRight,
   Droplets,
   Bell,
-  ArrowLeft,
   Scale,
   Apple,
   Coffee,
   Moon,
   Sun,
+  LogOut,
+  Loader2,
 } from "lucide-react";
 
 const mealPlan = [
@@ -80,8 +83,54 @@ const navItems = [
 ];
 
 const ClientApp: React.FC = () => {
+  const { user, loading, userRole, signOut } = useAuth();
+  const navigate = useNavigate();
   const [waterIntake, setWaterIntake] = useState(5);
+  const [clientName, setClientName] = useState("Cliente");
   const waterGoal = 8;
+
+  useEffect(() => {
+    if (!loading && (!user || userRole !== 'client')) {
+      navigate('/login/cliente');
+    }
+  }, [user, loading, userRole, navigate]);
+
+  useEffect(() => {
+    const fetchClientData = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('clients')
+        .select('full_name')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (data) {
+        setClientName(data.full_name.split(' ')[0]);
+      }
+    };
+
+    if (user && userRole === 'client') {
+      fetchClientData();
+    }
+  }, [user, userRole]);
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user || userRole !== 'client') {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto relative">
@@ -97,16 +146,18 @@ const ClientApp: React.FC = () => {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-lg px-4 py-4 border-b border-border/50">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-          </Link>
           <div className="flex items-center gap-2">
             <NutriLogo size={28} />
             <span className="text-lg font-bold text-gradient">NutriVida</span>
           </div>
-          <Button variant="ghost" size="iconSm">
-            <Bell className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="iconSm">
+              <Bell className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="iconSm" onClick={handleLogout}>
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -114,7 +165,7 @@ const ClientApp: React.FC = () => {
       <main className="flex-1 overflow-auto pb-24">
         {/* Greeting */}
         <div className="px-4 py-6">
-          <h1 className="text-2xl font-bold">Olá, Maria! 👋</h1>
+          <h1 className="text-2xl font-bold">Olá, {clientName}! 👋</h1>
           <p className="text-muted-foreground">Vamos manter o foco hoje!</p>
         </div>
 
